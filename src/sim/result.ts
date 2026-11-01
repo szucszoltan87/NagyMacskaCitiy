@@ -1,4 +1,4 @@
-import type { ActionResult } from './types';
+import type { ActionResult, SfxName } from './types';
 
-export const ok = (message = ''): ActionResult => ({ ok: true, message });
-export const fail = (message: string): ActionResult => ({ ok: false, message });
+export const ok = (message = '', sfx?: SfxName): ActionResult => (sfx ? { ok: true, message, sfx } : { ok: true, message });
+export const fail = (message: string): ActionResult => ({ ok: false, message, sfx: 'baj' });
