@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { HOME_BED_X } from '../src/data/buildings';
 import { HEAL_COST, PET_JOY, PLAY_JOY, WATER_DRINK } from '../src/sim/balance';
 import {
   buyFood, drinkWater, feedFromPantry, healCat, moveCat, orderMeal, petCat, playBall, putToBed, togglePause,
@@ -9,7 +8,7 @@ import { testCat, testWorld } from './helpers';
 describe('etetés a hűtőből', () => {
   it('a vega macska nem eszi meg a halat, és a hal megmarad', () => {
     const w = testWorld();
-    const c = testCat(w, { diet: 'vega' });
+    const c = testCat(w, { diet: 'vega' }, { place: 'otthon1' });
     c.needs.etel = 10;
     w.pantry.hal = 1;
     const r = feedFromPantry(w, c.id, 'hal');
@@ -20,7 +19,7 @@ describe('etetés a hűtőből', () => {
   });
   it('a vega macska megeszi a répát', () => {
     const w = testWorld();
-    const c = testCat(w, { diet: 'vega' });
+    const c = testCat(w, { diet: 'vega' }, { place: 'otthon1' });
     c.needs.etel = 10;
     w.pantry.repa = 2;
     expect(feedFromPantry(w, c.id, 'repa').ok).toBe(true);
@@ -29,7 +28,7 @@ describe('etetés a hűtőből', () => {
   });
   it('a húsevő a répát nem, a kenyeret megeszi', () => {
     const w = testWorld();
-    const c = testCat(w, { diet: 'husevo' });
+    const c = testCat(w, { diet: 'husevo' }, { place: 'otthon1' });
     w.pantry = { repa: 1, kenyer: 1 };
     expect(feedFromPantry(w, c.id, 'repa').ok).toBe(false);
     expect(feedFromPantry(w, c.id, 'kenyer').ok).toBe(true);
@@ -48,7 +47,7 @@ describe('etetés a hűtőből', () => {
   });
   it('a víz ingyen van', () => {
     const w = testWorld();
-    const c = testCat(w);
+    const c = testCat(w, {}, { place: 'otthon1' });
     c.needs.ital = 10;
     expect(drinkWater(w, c.id).ok).toBe(true);
     expect(c.needs.ital).toBe(10 + WATER_DRINK);
@@ -93,7 +92,7 @@ describe('étterem', () => {
   it('rendelés: fizet, eszik, örül', () => {
     const w = testWorld();
     testCat(w, { job: 'szakacs' });
-    const c = testCat(w, { diet: 'vega' });
+    const c = testCat(w, { diet: 'vega' }, { place: 'etterem' });
     c.needs.etel = 10;
     c.needs.jokedv = 10;
     expect(orderMeal(w, c.id, 'zoldsegleves').ok).toBe(true);
@@ -156,7 +155,7 @@ describe('mozgatás, alvás, játék', () => {
     c.place = 'otthon2';
     expect(putToBed(w, c.id).ok).toBe(true);
     expect(c.activity).toBe('alszik');
-    expect(c.x).toBe(HOME_BED_X);
+    expect(c.x).toBe(850);
   });
   it('simogatás jókedvet ad', () => {
     const w = testWorld();

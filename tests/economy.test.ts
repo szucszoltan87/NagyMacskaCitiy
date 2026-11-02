@@ -28,8 +28,9 @@ describe('pénz', () => {
   it('a beteg munkás nem kap fizetést', () => {
     const w = testWorld();
     w.coins = 0;
-    testCat(w, { job: 'orvos' });
-    testCat(w, { job: 'elado' }, { sick: true });
+    testCat(w, { job: 'orvos' }, { workedDay: 1 });
+    testCat(w, { job: 'elado' }, { sick: true, workedDay: 1 });
+    testCat(w, { job: 'szakacs' });
     testCat(w);
     expect(paySalaries(w)).toBe(SALARY);
     expect(w.coins).toBe(SALARY);

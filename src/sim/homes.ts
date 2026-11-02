@@ -15,7 +15,7 @@ export function placeHas(world: World, place: Place, kind: FurnitureId): boolean
 
 /** Hol alszik a macska: a ház ágyai közül a lakók sorrendje szerint; ágy nélkül null. */
 export function bedX(world: World, cat: Cat): number | null {
-  if (isLodge(cat.place)) return LODGE_BED_X + ((world.cats.indexOf(cat) % 3) - 1) * 50;
+  if (isLodge(cat.place)) return LODGE_BED_X + [0, -60, 60][world.cats.indexOf(cat) % 3];
   if (!isHome(cat.place)) return null;
   const home = cat.place;
   const beds = world.homes[home].items.filter((i) => i.kind === 'agy').sort((a, b) => a.x - b.x);
@@ -24,7 +24,7 @@ export function bedX(world: World, cat: Cat): number | null {
   const i = Math.max(0, sleepers.indexOf(cat));
   const bed = beds[i % beds.length];
   const slot = Math.floor(i / beds.length) % 3;
-  return bed.x + (slot - 1) * 60;
+  return bed.x + [0, -60, 60][slot];
 }
 
 export function clampFurnitureX(kind: FurnitureId, x: number): number {

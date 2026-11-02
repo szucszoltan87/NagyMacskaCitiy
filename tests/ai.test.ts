@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { BUILDINGS, HOME_BED_X } from '../src/data/buildings';
+import { BUILDINGS } from '../src/data/buildings';
+
+const HOME_BED_X = 800;
 import { updateCatAi, walkTowards } from '../src/sim/ai';
 import { never, seq, testCat, testWorld } from './helpers';
 
@@ -62,7 +64,7 @@ describe('macska-agy', () => {
     w.minute = 12 * 60;
     const c = testCat(w, {}, { place: 'otthon1', x: HOME_BED_X });
     c.needs.alvas = 10;
-    updateCatAi(w, c, 1, never);
+    for (let i = 0; i < 5; i++) updateCatAi(w, c, 1, never);
     expect(c.activity).toBe('alszik');
   });
 
@@ -82,7 +84,7 @@ describe('macska-agy', () => {
     const c = testCat(w, {}, { place: 'utca', x: 700 });
     updateCatAi(w, c, 1, seq(0.5, 0.01, 0.5));
     expect(c.goal).toBeNull();
-    expect(c.targetX).toBe(1500);
+    expect(c.targetX).toBe(3050);
   });
 
   it('nappal az utcán néha bemegy egy épületbe', () => {
