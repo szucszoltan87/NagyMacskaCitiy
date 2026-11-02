@@ -52,7 +52,7 @@ export function InsideScreen({ building }: { building: BuildingId }) {
               key={c.id}
               cat={c}
               x={l ? l.x : c.x}
-              y={l ? l.y + 60 : ROOM_FLOOR_Y}
+              y={l ? l.y + 60 : c.activity === 'alszik' ? ROOM_FLOOR_Y - 20 : ROOM_FLOOR_Y + 40}
               minute={world.minute}
               selected={c.id === selected}
               lifted={!!l}
@@ -60,12 +60,8 @@ export function InsideScreen({ building }: { building: BuildingId }) {
             />
           );
         })}
-        {cats.length === 0 && (
-          <text x={ROOM_WIDTH / 2} y={330} textAnchor="middle" fontSize={28} fontWeight={800} fill="#00000066">
-            Most nincs itt senki. Az utcán húzz ide egy macskát! 🐾
-          </text>
-        )}
       </svg>
+      {cats.length === 0 && <div className="room-hint">Most nincs itt senki. Az utcán húzz ide egy macskát! 🐾</div>}
       {home && <HomeTray />}
       {building === 'bolt' && <ShopTray />}
       {building === 'etterem' && <RestaurantTray />}

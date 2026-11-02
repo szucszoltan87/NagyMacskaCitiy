@@ -17,11 +17,12 @@ export function CatList({ onClose }: { onClose: () => void }) {
   return (
     <div className="modal-bg" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2>🐱 Macskáim ({world.cats.length}/{MAX_CATS})</h2>
+        <div className="ribbon modal-title">🐱 Macskáim ({world.cats.length}/{MAX_CATS})</div>
+        <button className="x-btn modal-close" aria-label="Bezár" onClick={onClose}>✕</button>
         <div className="cat-grid">
           {world.cats.map((c) => (
-            <button key={c.id} className="cat-card" onClick={() => go(c)}>
-              <CatFace looks={c.looks} sick={c.sick} sleeping={c.activity === 'alszik'} />
+            <button key={c.id} className="card" onClick={() => go(c)}>
+              <CatFace looks={c.looks} sick={c.sick} sleeping={c.activity === 'alszik'} sex={c.sex} />
               <span>{c.name}</span>
               <small>{placeName(c.place)} {warningIcons(c)}</small>
             </button>

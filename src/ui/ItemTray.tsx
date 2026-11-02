@@ -62,20 +62,20 @@ export function ItemTray({ title, items, empty, onUse }: {
 
   return (
     <div className="tray">
-      <div className="tray-title">{title}</div>
+      <div className="tray-title ribbon lilac">{title}</div>
       <div className="tray-items">
         {items.length === 0 && empty && <div className="tray-empty">{empty}</div>}
         {items.map((it) => (
           <button
             key={it.key}
-            className="tray-item"
+            className="card"
             disabled={it.disabled}
             onPointerDown={onDown(it)}
             onPointerMove={onMove(it)}
             onPointerUp={onUp(it)}
             onPointerCancel={cancel}
           >
-            <span className="tray-emoji">{it.emoji}</span>
+            <span className="card-emoji">{it.emoji}</span>
             <span>{it.label}</span>
             {it.sub && <small>{it.sub}</small>}
           </button>

@@ -114,6 +114,15 @@ A meleg ruhának szerepe van: a Hós-hegyen meleg kabát nélkül fázik a macsk
 
 ---
 
+## Látvány – „My Dog Town”-stílus (2026-11-02, a szülő kérésére)
+
+A kinézet a *My Dog Town* játékot követi, de nagymacskákkal és a mi nagyobb játékszerkezetünkkel.
+- **Hangulat:** pasztell, cuki, meséskönyv. Krémszínű papír, rózsaszín, lila, menta és vaj színek, csillámok ✦ és szívecskék. Fekete helyett szilvás-barna (#5B3350) szöveg és kontúr.
+- **Figurák:** csibi nagymacskák, továbbra is két lábon, ember alakúak (a kislány kérése). Nagyon nagy fej, csillogó, többfényű szemek gradiens írisszel, lánynál pillák. Kis ω-száj, pirospozsgás arc, bolyhos pofa-pamacs és üstök. A kontúr színes: a bunda sötétebb árnyalata.
+- **Helyek:** zsúfolt, otthonos babaház-szobák (tapéta, égősor, boltíves ablak függönnyel, polc, bolyhos szőnyeg, mélységet adó padló). Az utcán pikkelyes tetők, boltíves ablakok virágládával, cseresznyefák, zászlófüzér, pasztell járólapok.
+- **Kezelőfelület:** kerek ikongombok rövid felirattal, kerek vissza-nyíl, szalag-címkék. Lila panelek fehér kártyarácsokkal (mint a My Dog Town ruhatára), körgyűrűs igény-mérők. A Macskaműhely és később az öltöző is „bal oldalt a figura a szobában, jobb oldalt fülek + kártyarács” elrendezésű.
+- **Betűtípus:** Fredoka (a játékkal együtt települ, internet nélkül is működik).
+
 ## Technikai megoldás (ajánlott)
 
 - **Vite + TypeScript + React**, a jelenet **SVG**-ben. A macskák kódból rajzolt rétegekből állnak (test, fej, fül, minta, szem, ruharétegek), így a színek, a minták, a ruhák és a keverék babák automatikusan elkészülnek.

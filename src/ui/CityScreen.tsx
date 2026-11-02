@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { BuildingArt } from '../art/BuildingArt';
-import { Sky, Street } from '../art/Scenery';
+import { Backdrop, Sky, Street, StreetFront } from '../art/Scenery';
 import {
   BUILDING_IDS, BUILDINGS, GROUND_Y, ROOM_DOOR_X, SCENE_HEIGHT, SIDEWALK_Y, STREET_WIDTH, WORKSHOP,
 } from '../data/buildings';
@@ -55,11 +55,13 @@ export function CityScreen() {
     <div className="city-scroll" ref={scrollRef}>
       <svg ref={svgRef} className="city-svg" viewBox={`0 0 ${STREET_WIDTH} ${SCENE_HEIGHT}`} {...svgHandlers}>
         <Sky phase={phase} width={STREET_WIDTH} />
-        <Street width={STREET_WIDTH} lit={lit} />
+        <Backdrop night={phase === 'ejjel'} />
+        <Street width={STREET_WIDTH} />
         {BUILDING_IDS.map((id) => (
           <BuildingArt key={id} def={BUILDINGS[id]} lit={lit} onOpen={() => setScreen({ kind: 'inside', building: id })} />
         ))}
         <BuildingArt def={WORKSHOP} lit={lit} onOpen={() => setScreen({ kind: 'creator' })} />
+        <StreetFront lit={lit} />
         {cats.map((c) => {
           const l = lift?.catId === c.id ? lift.p : null;
           return (

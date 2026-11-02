@@ -46,11 +46,11 @@ export function ShopTray() {
   const act = useGame((s) => s.act);
   return (
     <div className="tray">
-      <div className="tray-title">🛒 Bolt – koppints, amit megveszel! (A hűtőbe kerül.)</div>
+      <div className="tray-title ribbon lilac">🛒 Bolt – koppints, amit megveszel! (A hűtőbe kerül.)</div>
       <div className="tray-items">
         {FOOD_IDS.map((id) => (
-          <button key={id} className="tray-item" onClick={() => act((w) => buyFood(w, id))}>
-            <span className="tray-emoji">{FOODS[id].emoji}</span>
+          <button key={id} className="card" onClick={() => act((w) => buyFood(w, id))}>
+            <span className="card-emoji">{FOODS[id].emoji}</span>
             <span>{FOODS[id].name}</span>
             <small>{FOODS[id].price} 🐾 · {KIND_ICON[FOODS[id].kind]}</small>
             <small>Hűtőben: {world.pantry[id] ?? 0}</small>
@@ -68,7 +68,7 @@ export function HospitalTray() {
   const sickHere = world.cats.filter((c) => c.place === 'korhaz' && c.sick);
   return (
     <div className="tray">
-      <div className="tray-title">
+      <div className="tray-title ribbon lilac">
         🏥 Kórház – {doctor ? `az orvos: ${doctor.name} 🩺` : 'nincs orvos! Építs egyet a Macskaműhelyben.'}
       </div>
       <div className="tray-items">
@@ -76,8 +76,8 @@ export function HospitalTray() {
           <div className="tray-empty">Itt most nincs beteg. 😊 A beteg macskát az utcán húzd rá a kórházra!</div>
         ) : (
           sickHere.map((c) => (
-            <button key={c.id} className="tray-item wide" onClick={() => act((w) => healCat(w, c.id))}>
-              <span className="tray-emoji">💊</span>
+            <button key={c.id} className="card wide" onClick={() => act((w) => healCat(w, c.id))}>
+              <span className="card-emoji">💊</span>
               <span>{c.name} gyógyítása</span>
               <small>{HEAL_COST} 🐾</small>
             </button>

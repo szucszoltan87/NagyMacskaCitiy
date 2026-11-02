@@ -9,6 +9,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: { globPatterns: ['**/*.{js,css,html,woff2,png,svg,ico}'] },
       includeAssets: ['favicon.ico', 'favicon.svg', 'apple-touch-icon-180x180.png'],
       manifest: {
         name: 'NagyMacskaCitiy',
@@ -17,8 +18,8 @@ export default defineConfig({
         lang: 'hu',
         display: 'standalone',
         orientation: 'landscape',
-        background_color: '#7EC8F5',
-        theme_color: '#F08A24',
+        background_color: '#FFF8EE',
+        theme_color: '#FF8FB4',
         icons: [
           { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },

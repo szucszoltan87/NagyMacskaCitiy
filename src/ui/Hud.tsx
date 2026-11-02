@@ -7,6 +7,15 @@ import { CatList } from './CatList';
 
 const PHASE_ICON: Record<DayPhase, string> = { reggel: '🌅', nappal: '☀️', este: '🌇', ejjel: '🌙' };
 
+export function IconBtn({ icon, label, onClick }: { icon: string; label: string; onClick: () => void }) {
+  return (
+    <button className="icon-btn" aria-label={label} onClick={onClick}>
+      <span className="ib-icon">{icon}</span>
+      <span className="ib-label">{label}</span>
+    </button>
+  );
+}
+
 export function Hud() {
   const world = useGame((s) => s.world)!;
   const screen = useGame((s) => s.screen);
@@ -17,16 +26,17 @@ export function Hud() {
   return (
     <>
       <div className="hud">
-        {building && <button className="chip btn" onClick={() => setScreen({ kind: 'city' })}>⬅ Utca</button>}
-        {building && <div className="chip">{building.emoji} {building.name}</div>}
-        <div className="spacer" />
-        <div className="chip">{PHASE_ICON[phaseOf(world.minute)]} {formatClock(world.minute)} · {dayOf(world.minute)}. nap</div>
-        <div className="chip">🐾 {world.coins}</div>
-        <button className="chip btn" onClick={() => setListOpen(true)}>🐱 Macskáim</button>
-        <button className="chip btn" onClick={() => setScreen({ kind: 'creator' })}>➕ Új macska</button>
-        <button className="chip btn" aria-label={world.paused ? 'Folytatás' : 'Szünet'} onClick={() => act((w) => togglePause(w))}>
-          {world.paused ? '▶️' : '⏸️'}
-        </button>
+        <div className="hud-left">
+          {building && <button className="round-btn" aria-label="Utca" onClick={() => setScreen({ kind: 'city' })}>⬅</button>}
+          {building && <div className="ribbon">{building.emoji} {building.name}</div>}
+        </div>
+        <div className="hud-right">
+          <div className="pill">{PHASE_ICON[phaseOf(world.minute)]} {formatClock(world.minute)} · {dayOf(world.minute)}. nap</div>
+          <div className="pill coin">🐾 {world.coins}</div>
+          <IconBtn icon="🐱" label="Macskáim" onClick={() => setListOpen(true)} />
+          <IconBtn icon="➕" label="Új macska" onClick={() => setScreen({ kind: 'creator' })} />
+          <IconBtn icon={world.paused ? '▶️' : '⏸️'} label={world.paused ? 'Folytatás' : 'Szünet'} onClick={() => act((w) => togglePause(w))} />
+        </div>
       </div>
       {listOpen && <CatList onClose={() => setListOpen(false)} />}
     </>
