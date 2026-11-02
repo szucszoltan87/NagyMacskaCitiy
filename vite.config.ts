@@ -5,11 +5,13 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
+  define: { __BUILD__: JSON.stringify(new Date().toISOString()) },
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      workbox: { globPatterns: ['**/*.{js,css,html,woff2,png,svg,ico}'] },
+      injectRegister: false,
+      workbox: { clientsClaim: true, skipWaiting: true, cleanupOutdatedCaches: true, globPatterns: ['**/*.{js,css,html,woff2,png,svg,ico}'] },
       includeAssets: ['favicon.ico', 'favicon.svg', 'apple-touch-icon-180x180.png'],
       manifest: {
         name: 'NagyMacskaCitiy',

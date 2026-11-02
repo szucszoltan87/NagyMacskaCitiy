@@ -24,7 +24,7 @@ export function App() {
 
   if (!world) return <div className="loading">🐾 Betöltés…</div>;
   return (
-    <div className="app">
+    <div className="app" data-build={__BUILD__}>
       {screen.kind === 'city' && <CityScreen />}
       {screen.kind === 'inside' && <InsideScreen building={screen.building} />}
       {screen.kind === 'creator' && <CreatorScreen />}
