@@ -50,7 +50,82 @@ function Bush({ x }: { x: number }) {
   );
 }
 
-export function BuildingArt({ def, lit, onOpen }: { def: BuildingDef; lit: boolean; onOpen: () => void }) {
+function Garden({ def }: { def: BuildingDef }) {
+  const { x, width: w, doorX, wall, roof, kind } = def;
+  const G = GROUND_Y;
+  const line = lineColor(roof);
+  return (
+    <g>
+      {kind === 'park' && (
+        <g>
+          <path d={`M ${x + 60} ${G} L ${x + 90} ${G - 170} L ${x + 210} ${G - 170} L ${x + 240} ${G}`} stroke="#E57AA0" strokeWidth={8} fill="none" strokeLinejoin="round" />
+          <line x1={x + 130} y1={G - 170} x2={x + 130} y2={G - 70} stroke="#B48AA6" strokeWidth={3} />
+          <line x1={x + 170} y1={G - 170} x2={x + 170} y2={G - 70} stroke="#B48AA6" strokeWidth={3} />
+          <rect x={x + 120} y={G - 72} width={60} height={10} rx={5} fill="#FFE58F" stroke="#E8B04B" strokeWidth={2} />
+          <path d={`M ${x + w - 220} ${G} L ${x + w - 220} ${G - 150} L ${x + w - 180} ${G - 150} Q ${x + w - 120} ${G - 140} ${x + w - 60} ${G - 20} L ${x + w - 60} ${G}`} fill="none" stroke="#5CC3A0" strokeWidth={10} strokeLinejoin="round" />
+          <rect x={x + w - 228} y={G - 160} width={52} height={14} rx={6} fill="#A8E6CF" />
+          <circle cx={x + w - 300} cy={G - 120} r={60} fill="#9EDFC0" stroke="#5CC3A0" strokeWidth={4} />
+        </g>
+      )}
+      {kind === 'strand' && (
+        <g>
+          <path d={`M ${x} ${G - 80} Q ${x + w / 4} ${G - 96} ${x + w / 2} ${G - 80} T ${x + w} ${G - 80} L ${x + w} ${G} L ${x} ${G} Z`} fill="#7FD3F2" />
+          <path d={`M ${x + 20} ${G - 70} q 20 -10 40 0 M ${x + 200} ${G - 66} q 20 -10 40 0 M ${x + 380} ${G - 72} q 20 -10 40 0`} stroke="#fff" strokeWidth={4} fill="none" strokeLinecap="round" />
+          <rect x={x} y={G - 34} width={w} height={34} fill="#FFE9B0" />
+          <line x1={x + 120} y1={G} x2={x + 120} y2={G - 150} stroke="#B98673" strokeWidth={5} />
+          <path d={`M ${x + 40} ${G - 140} Q ${x + 120} ${G - 210} ${x + 200} ${G - 140} Z`} fill="#FF9EBE" stroke="#E57AA0" strokeWidth={3} />
+          <path d={`M ${x + 120} ${G - 190} L ${x + 80} ${G - 140} M ${x + 120} ${G - 190} L ${x + 160} ${G - 140}`} stroke="#fff" strokeWidth={6} />
+        </g>
+      )}
+      {kind === 'busz' && (
+        <g>
+          <rect x={x + 20} y={G - 190} width={w - 40} height={18} rx={9} fill={roof} stroke={line} strokeWidth={3} />
+          <rect x={x + 30} y={G - 172} width={8} height={172} fill={line} />
+          <rect x={x + w - 38} y={G - 172} width={8} height={172} fill={line} />
+          <rect x={x + 44} y={G - 160} width={w - 88} height={110} rx={10} fill="#E3F6FF" opacity={0.7} stroke="#BDE6FF" strokeWidth={3} />
+          <rect x={x + 60} y={G - 44} width={w - 120} height={12} rx={6} fill="#FFB38A" />
+        </g>
+      )}
+      <g fill="#fff" stroke={shade(wall, -0.25)} strokeWidth={2.5}>
+        {Array.from({ length: Math.floor(w / 26) }, (_, i) => {
+          const px = x + i * 26 + 6;
+          if (Math.abs(px + 7 - doorX) < 50) return null;
+          return <path key={i} d={`M ${px} ${G} L ${px} ${G - 46} L ${px + 7} ${G - 56} L ${px + 14} ${G - 46} L ${px + 14} ${G} Z`} />;
+        })}
+        <rect x={x} y={G - 36} width={w} height={8} rx={4} />
+      </g>
+      <path d={`M ${doorX - 48} ${G} L ${doorX - 48} ${G - 120} Q ${doorX} ${G - 175} ${doorX + 48} ${G - 120} L ${doorX + 48} ${G}`} fill="none" stroke={roof} strokeWidth={10} strokeLinecap="round" />
+      {[-30, 0, 30].map((d) => <circle key={d} cx={doorX + d} cy={G - 150 + Math.abs(d) * 0.6} r={7} fill={['#FF9EBE', '#FFE58F', '#A8E6CF'][(d / 30 + 1)]} stroke="#fff" strokeWidth={2} />)}
+    </g>
+  );
+}
+
+function LockBadge({ def, stars }: { def: BuildingDef; stars: number }) {
+  return (
+    <g pointerEvents="none">
+      <rect x={def.x} y={GROUND_Y - def.height} width={def.width} height={def.height} rx={16} fill="#EDE4FF" opacity={0.72} />
+      <g transform={`translate(${def.x + def.width / 2} ${GROUND_Y - def.height / 2})`}>
+        <circle r={46} fill="#fff" stroke="#C9B6F2" strokeWidth={5} />
+        <text y={-4} textAnchor="middle" fontSize={34}>🔒</text>
+        <text y={30} textAnchor="middle" fontSize={22} fontWeight={700} fill="#5B3350">{stars} ⭐</text>
+      </g>
+    </g>
+  );
+}
+
+export function BuildingArt({ def, lit, onOpen, locked = false }: { def: BuildingDef; lit: boolean; onOpen: () => void; locked?: boolean }) {
+  if (def.style === 'kert') {
+    return (
+      <g className="building" onClick={onOpen}>
+        <Garden def={def} />
+        <g transform={`translate(${def.x + def.width / 2} ${GROUND_Y - def.height + 10})`}>
+          <path d={`M ${-def.width * 0.4} -24 h ${def.width * 0.8} l -12 22 l 12 22 h ${-def.width * 0.8} l 12 -22 Z`} fill="#FFF8EE" stroke={lineColor(def.roof)} strokeWidth={3} strokeLinejoin="round" />
+          <text x={0} y={8} textAnchor="middle" fontSize={24} fontWeight={600} fill="#5B3350">{def.emoji} {def.name}</text>
+        </g>
+        {locked && <LockBadge def={def} stars={def.unlock} />}
+      </g>
+    );
+  }
   const { x, width: w, height: h, wall, roof, doorX } = def;
   const top = GROUND_Y - h;
   const line = lineColor(wall);
@@ -113,6 +188,7 @@ export function BuildingArt({ def, lit, onOpen }: { def: BuildingDef; lit: boole
         />
         <text x={0} y={8} textAnchor="middle" fontSize={24} fontWeight={600} fill="#5B3350">{def.emoji} {def.name}</text>
       </g>
+      {locked && <LockBadge def={def} stars={def.unlock} />}
     </g>
   );
 }

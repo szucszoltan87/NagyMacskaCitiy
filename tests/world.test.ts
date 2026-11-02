@@ -38,6 +38,7 @@ describe('világ', () => {
   it('este 6-kor egyszer jár fizetés', () => {
     const w = createInitialWorld();
     w.minute = 17 * 60 + 59;
+    w.quests = [];
     for (const c of w.cats) if (c.job) c.workedDay = 1;
     const before = w.coins;
     tickWorld(w, 2, never);

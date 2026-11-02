@@ -7,6 +7,11 @@ import { playSfx } from '../ui/sfx';
 
 export type Screen = { kind: 'city'; street: StreetId } | { kind: 'inside'; building: BuildingId } | { kind: 'creator' };
 export interface Toast { text: string; id: number }
+export type Modal =
+  | { kind: 'catlist' } | { kind: 'quests' } | { kind: 'map' } | { kind: 'lexicon' } | { kind: 'szulo' } | { kind: 'event' }
+  | { kind: 'zsiraf' } | { kind: 'lecke' } | { kind: 'recept' }
+  | { kind: 'wardrobe'; catId: string } | { kind: 'job'; catId: string } | { kind: 'partner'; catId: string }
+  | { kind: 'tipp'; catId: string } | { kind: 'home'; catId: string };
 export interface Trip { mode: TransportMode; to: StreetId; names: string[]; id: number }
 
 interface GameStore {
@@ -17,6 +22,8 @@ interface GameStore {
   focusCatId: string | null;
   toasts: Toast[];
   trip: Trip | null;
+  modal: Modal | null;
+  openModal: (modal: Modal | null) => void;
   setWorld: (world: World) => void;
   setScreen: (screen: Screen) => void;
   select: (id: string | null) => void;
@@ -41,6 +48,8 @@ export const useGame = create<GameStore>((set, get) => ({
   focusCatId: null,
   toasts: [],
   trip: null,
+  modal: null,
+  openModal: (modal) => set({ modal }),
   setWorld: (world) => set({ world }),
   setScreen: (screen) => set({ screen }),
   select: (selectedCatId) => set({ selectedCatId }),

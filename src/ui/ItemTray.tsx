@@ -1,4 +1,4 @@
-import { useRef, useState, type PointerEvent } from 'react';
+import { useRef, useState, type PointerEvent, type ReactNode } from 'react';
 import { useGame } from '../store/store';
 
 export interface TrayItem {
@@ -17,10 +17,11 @@ function catIdAt(x: number, y: number): string | null {
   return null;
 }
 
-export function ItemTray({ title, items, empty, onUse }: {
+export function ItemTray({ title, items, empty, extra, onUse }: {
   title: string;
   items: TrayItem[];
   empty?: string;
+  extra?: ReactNode;
   onUse: (key: string, catId: string) => void;
 }) {
   const selected = useGame((s) => s.selectedCatId);
@@ -64,6 +65,7 @@ export function ItemTray({ title, items, empty, onUse }: {
     <div className="tray">
       <div className="tray-title ribbon lilac">{title}</div>
       <div className="tray-items">
+        {extra}
         {items.length === 0 && empty && <div className="tray-empty">{empty}</div>}
         {items.map((it) => (
           <button

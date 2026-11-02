@@ -1,5 +1,6 @@
 import { useId } from 'react';
-import type { Activity, AgeStage, EarKind, Looks, PatternKind, Sex } from '../sim/types';
+import type { Activity, AgeStage, EarKind, HairId, Looks, Outfit, PatternKind, Sex } from '../sim/types';
+import { FaceWear, Hair, HeadWear, LegWear, Nails, SleeveWear, TorsoWear } from './Clothes';
 import { lineColor, shade } from './color';
 
 export const AGE_SCALE: Record<AgeStage, number> = { baba: 0.6, gyerek: 0.8, felnott: 1 };
@@ -105,9 +106,16 @@ interface Props {
   sick: boolean;
   facing: 1 | -1;
   sex?: Sex;
+  outfit?: Outfit;
+  hair?: HairId;
+  hairColor?: string;
+  nails?: string | null;
+  pregnant?: boolean;
 }
 
-export function CatFigure({ looks, age, activity, sick, facing, sex = 'lany' }: Props) {
+const NO_OUTFIT: Outfit = {};
+
+export function CatFigure({ looks, age, activity, sick, facing, sex = 'lany', outfit = NO_OUTFIT, hair = 'nincs', hairColor = '#6D4C41', nails = null, pregnant = false }: Props) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, '');
   const { fur, belly, pattern, patternColor, eyes } = looks;
   const line = lineColor(fur);
@@ -136,6 +144,7 @@ export function CatFigure({ looks, age, activity, sick, facing, sex = 'lany' }: 
           <g key={s} className={`leg ${s < 0 ? 'leg-l' : 'leg-r'}`}>
             <rect x={s < 0 ? -18 : 4} y={-34} width={14} height={32} rx={7} fill={fur} stroke={line} strokeWidth={2.5} />
             <ellipse cx={s < 0 ? -9 : 13} cy={-3} rx={10} ry={6.5} fill={shade(belly, -0.03)} stroke={line} strokeWidth={2.5} />
+            <LegWear outfit={outfit} side={s as -1 | 1} />
           </g>
         ))}
         <g className="bob">
@@ -145,9 +154,18 @@ export function CatFigure({ looks, age, activity, sick, facing, sex = 'lany' }: 
             <PatternMarks kind={pattern} color={patternColor} area="body" />
             <ellipse cx={0} cy={-82} rx={24} ry={7} fill={furShadow} opacity={0.6} />
           </g>
+          {pregnant && (
+            <g>
+              <ellipse cx={4} cy={-52} rx={26} ry={22} fill={fur} stroke={line} strokeWidth={2.5} />
+              <ellipse cx={6} cy={-50} rx={17} ry={15} fill={belly} />
+              <path d="M 6 -46 c -3 -4 -8 -1 -5 3 l 5 5 l 5 -5 c 3 -4 -2 -7 -5 -3 Z" fill="#FF8FB4" />
+            </g>
+          )}
+          <TorsoWear outfit={outfit} />
           {[-1, 1].map((s) => (
             <g key={s} className={`arm ${s < 0 ? 'arm-l' : 'arm-r'}`}>
               <rect x={s < 0 ? -33 : 22} y={-80} width={11} height={30} rx={5.5} fill={fur} stroke={line} strokeWidth={2.5} />
+              <SleeveWear outfit={outfit} side={s as -1 | 1} />
               <circle cx={s < 0 ? -27.5 : 27.5} cy={-51} r={6.5} fill={shade(belly, -0.03)} stroke={line} strokeWidth={2.5} />
             </g>
           ))}
@@ -170,6 +188,7 @@ export function CatFigure({ looks, age, activity, sick, facing, sex = 'lany' }: 
           </g>
           <path d="M -9 -157 Q -6 -170 2 -162 Q 6 -172 12 -160" stroke={line} strokeWidth={6.5} fill="none" strokeLinecap="round" strokeLinejoin="round" />
           <path d="M -9 -157 Q -6 -170 2 -162 Q 6 -172 12 -160" stroke={fur} strokeWidth={3} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          <Hair hair={hair} color={hairColor} />
           <ellipse cx={0} cy={-96} rx={15} ry={9.5} fill={belly} />
           {sleeping ? (
             <g stroke={EYE_DARK} strokeWidth={3} fill="none" strokeLinecap="round">
@@ -198,6 +217,9 @@ export function CatFigure({ looks, age, activity, sick, facing, sex = 'lany' }: 
               <path d={`M ${27 * s} -102 l ${-1.5 * s} 3 M ${31 * s} -102 l ${-1.5 * s} 3 M ${35 * s} -102 l ${-1.5 * s} 3`} stroke="#fff" strokeWidth={1.2} strokeLinecap="round" opacity={0.8} />
             </g>
           ))}
+          <FaceWear outfit={outfit} />
+          <HeadWear outfit={outfit} />
+          {nails && <Nails color={nails} at="hand" />}
           {sick && (
             <>
               <ellipse cx={0} cy={HEAD_Y} rx={45} ry={39} fill="#9CCC65" opacity={0.25} />

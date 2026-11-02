@@ -15,7 +15,7 @@ const FUN_FURS = ['#F2C14E', '#E07B39', '#C9955E', '#8D6E63', '#D9D9D2', '#FFFFF
 const EYES = ['#E2B33C', '#8FB7C9', '#9BBF6A', '#6D4C41', '#4FC3F7', '#BA68C8', '#FF8FB4', '#5CC3A0'];
 const PATTERNS: Array<[PatternKind, string]> = [['nincs', 'Nincs'], ['csikos', 'Csíkos'], ['rozettas', 'Rozettás'], ['pottyos', 'Pöttyös'], ['felhos', 'Felhős']];
 const AGES: AgeStage[] = ['baba', 'gyerek', 'felnott'];
-const HOMES: HomeId[] = ['otthon1', 'otthon2'];
+const HOMES: HomeId[] = ['otthon1', 'otthon2', 'otthon3'];
 
 type Tab = 'faj' | 'ki' | 'bunda' | 'minta' | 'szem' | 'etrend' | 'szakma' | 'otthon';
 const TABS: Array<[Tab, string, string]> = [
@@ -67,6 +67,7 @@ function Stage({ draft }: { draft: CatDraft }) {
 
 export function CreatorScreen() {
   const act = useGame((s) => s.act);
+  const world = useGame((s) => s.world);
   const setScreen = useGame((s) => s.setScreen);
   const [d, setD] = useState<CatDraft>(() => newDraft('jaguar', 'lany', 'felnott'));
   const [tab, setTab] = useState<Tab>('faj');
@@ -80,7 +81,7 @@ export function CreatorScreen() {
 
   const finish = () => {
     const r = act((w) => addCat(w, d));
-    if (r?.ok) setScreen({ kind: 'city' });
+    if (r?.ok) setScreen({ kind: 'city', street: 'belvaros' });
   };
 
   const tabs = TABS.filter(([t]) => t !== 'szakma' || d.age === 'felnott');
@@ -177,7 +178,7 @@ export function CreatorScreen() {
       options = (
         <div className="opt-grid">
           {HOMES.map((h) => (
-            <button key={h} className={cls('card', d.homeId === h)} onClick={() => update({ homeId: h })}>
+            <button key={h} className={cls('card', d.homeId === h)} disabled={(world?.stars ?? 0) < BUILDINGS[h].unlock} onClick={() => update({ homeId: h })}>
               <span className="card-emoji">{BUILDINGS[h].emoji}</span>{BUILDINGS[h].name}
             </button>
           ))}
@@ -193,7 +194,7 @@ export function CreatorScreen() {
         <div className="fact-bubble">💡 {SPECIES[d.species].fact}<br />🌍 Otthona: {SPECIES[d.species].habitat}</div>
         <div className="stage-actions">
           <button className="round-btn big ok" aria-label="Kész" onClick={finish}>✔</button>
-          <button className="round-btn grey" aria-label="Mégse" onClick={() => setScreen({ kind: 'city' })}>✕</button>
+          <button className="round-btn grey" aria-label="Mégse" onClick={() => setScreen({ kind: 'city', street: 'belvaros' })}>✕</button>
         </div>
         <div className="name-plate">
           <input placeholder="Név" value={d.name} maxLength={16} onChange={(e) => update({ name: e.target.value })} />

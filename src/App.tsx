@@ -8,6 +8,7 @@ import { CityScreen } from './ui/CityScreen';
 import { CreatorScreen } from './ui/CreatorScreen';
 import { Hud } from './ui/Hud';
 import { InsideScreen } from './ui/InsideScreen';
+import { Modals, Naming, TripOverlay } from './ui/Modals';
 import { Toast } from './ui/Toast';
 
 export function App() {
@@ -25,11 +26,14 @@ export function App() {
   if (!world) return <div className="loading">🐾 Betöltés…</div>;
   return (
     <div className="app" data-build={__BUILD__}>
-      {screen.kind === 'city' && <CityScreen />}
-      {screen.kind === 'inside' && <InsideScreen building={screen.building} />}
+      {screen.kind === 'city' && <CityScreen street={screen.street} />}
+      {screen.kind === 'inside' && <InsideScreen key={screen.building} building={screen.building} />}
       {screen.kind === 'creator' && <CreatorScreen />}
       {screen.kind !== 'creator' && <Hud />}
       {screen.kind !== 'creator' && <CatPanel />}
+      <Modals />
+      <Naming />
+      <TripOverlay />
       <Toast />
     </div>
   );
