@@ -131,8 +131,8 @@ export function Hair({ hair, color }: { hair: HairId; color: string }) {
         <g>
           {[-1, 1].map((s) => (
             <g key={s}>
-              <ellipse {...p} cx={52 * s} cy={-120} rx={12} ry={24} transform={`rotate(${-15 * s} ${52 * s} -120)`} />
-              <circle cx={46 * s} cy={-142} r={6} fill="#FF8FB4" stroke="#fff" strokeWidth={2} />
+              <path {...p} d={`M ${44 * s} -130 Q ${66 * s} -134 ${70 * s} -112 Q ${72 * s} -92 ${60 * s} -84 Q ${62 * s} -104 ${46 * s} -112 Z`} />
+              <circle cx={48 * s} cy={-128} r={6} fill="#FF8FB4" stroke="#fff" strokeWidth={2} />
             </g>
           ))}
         </g>

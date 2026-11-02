@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import { memo, type ReactElement } from 'react';
 import { GROUND_Y, type BuildingDef } from '../data/buildings';
 import { lineColor, shade } from './color';
 
@@ -113,7 +113,7 @@ function LockBadge({ def, stars }: { def: BuildingDef; stars: number }) {
   );
 }
 
-export function BuildingArt({ def, lit, onOpen, locked = false }: { def: BuildingDef; lit: boolean; onOpen: () => void; locked?: boolean }) {
+function BuildingArtRaw({ def, lit, onOpen, locked = false }: { def: BuildingDef; lit: boolean; onOpen: () => void; locked?: boolean }) {
   if (def.style === 'kert') {
     return (
       <g className="building" onClick={onOpen}>
@@ -192,3 +192,6 @@ export function BuildingArt({ def, lit, onOpen, locked = false }: { def: Buildin
     </g>
   );
 }
+
+/** Az onOpen-t nem hasonlítjuk: a hívó a friss állapotot a store-ból olvassa. */
+export const BuildingArt = memo(BuildingArtRaw, (a, b) => a.def === b.def && a.lit === b.lit && a.locked === b.locked);

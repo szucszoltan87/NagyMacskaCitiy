@@ -38,7 +38,6 @@ export function Hud() {
         <IconBtn icon="📋" label="Feladatok" badge={`${done}/${world.quests.length}`} onClick={() => openModal({ kind: 'quests' })} />
         <IconBtn icon="🗺️" label="Térkép" onClick={() => openModal({ kind: 'map' })} />
         <IconBtn icon="🐱" label="Macskáim" onClick={() => openModal({ kind: 'catlist' })} />
-        <IconBtn icon="➕" label="Új macska" onClick={() => setScreen({ kind: 'creator' })} />
         <IconBtn icon="📖" label="Lexikon" onClick={() => openModal({ kind: 'lexicon' })} />
         <IconBtn icon={world.paused ? '▶️' : '⏸️'} label={world.paused ? 'Folytatás' : 'Szünet'} onClick={() => act((w) => togglePause(w))} />
         <IconBtn icon="⚙️" label="Szülőknek" onClick={() => openModal({ kind: 'szulo' })} />

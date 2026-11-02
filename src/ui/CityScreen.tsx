@@ -214,7 +214,8 @@ export function CityScreen({ street }: { street: StreetId }) {
   const cats = heldLast(world.cats.filter((c) => c.place === 'utca' && c.street === street), lift?.catId);
   const open = (b: BuildingDef) => {
     if (b.id === 'muhely') return setScreen({ kind: 'creator' });
-    if (!buildingOpen(world, b.id)) return showToast(`🔒 Még ${b.unlock - world.stars} ⭐ kell! Teljesíts feladatokat a 📋 táblán.`);
+    const now = useGame.getState().world!;
+    if (!buildingOpen(now, b.id)) return showToast(`🔒 Még ${b.unlock - now.stars} ⭐ kell! Teljesíts feladatokat a 📋 táblán.`);
     setScreen({ kind: 'inside', building: b.id });
   };
 

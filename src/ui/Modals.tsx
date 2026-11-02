@@ -61,6 +61,9 @@ function CatList() {
   ];
   return (
     <Shell title={`🐱 Macskáim (${world.cats.length}/${MAX_CATS})`} onClose={close}>
+      <button className="card wide new-cat" aria-label="Új macska" onClick={() => { useGame.getState().setScreen({ kind: 'creator' }); close(); }}>
+        <span className="card-emoji">➕</span>Új macska a Macskaműhelyben 🛠️
+      </button>
       {groups.map(([label, cats]) => (
         <div key={label}>
           <h3>{label}</h3>

@@ -55,7 +55,7 @@ function makeQuest(world: World, kind: QuestKind, rng: Rng): Quest | null {
       const b = BUILDINGS[building];
       return q(`🕐 ${cat.name} legyen itt: ${b.emoji} ${b.name}, ${num}:00 és ${num + 1}:00 között!`, 1, { num, building, catId: cat.id });
     }
-    case 'jokedv': return q('😊 Legyen egyszerre minden városi macska jókedve 60 fölött!');
+    case 'jokedv': return q('😊 Legyen egyszerre minden városi macska jókedve 90 fölött! (Simogasd, játssz velük!)');
     case 'recept': return q('🧑‍🍳 Főzz valamit az étteremben két hozzávalóból!');
     case 'kivansag': return q('💭 Teljesíts 2 kívánságot! (Figyeld a buborékokat!)', 2);
     case 'fejfedo': return q('🎩 Legyen egyszerre 2 macskán valami a fején!', 2);
@@ -146,7 +146,7 @@ export function checkStateQuests(world: World): void {
         break;
       }
       case 'jokedv':
-        if (city.length > 0 && city.every((c) => c.needs.jokedv > 60)) complete(world, q);
+        if (city.length > 0 && city.every((c) => c.needs.jokedv > 90)) complete(world, q);
         break;
       case 'fejfedo': {
         const n = world.cats.filter((c) => c.outfit.fej).length;

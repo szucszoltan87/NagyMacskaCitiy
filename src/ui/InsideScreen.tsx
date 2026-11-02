@@ -1,4 +1,4 @@
-import { useRef, useState, type PointerEvent } from 'react';
+import { memo, useRef, useState, type PointerEvent } from 'react';
 import {
   ClothesShopScene, FireScene, FurniturePiece, FurnitureShopScene, HospitalFurniture, IskolaScene, LodgeScene, OvodaScene, ParkScene,
   RestaurantFurniture, RoomBackdrop, SalonScene, ShopFurniture, StationScene, StrandScene,
@@ -40,7 +40,7 @@ function Board({ world, building }: { world: World; building: BuildingId }) {
   );
 }
 
-function Scene({ world, building, onTap }: { world: World; building: BuildingId; onTap: (kind: FurnitureId | 'homok') => void }) {
+function SceneRaw({ world, building, onTap }: { world: World; building: BuildingId; onTap: (kind: FurnitureId | 'homok') => void }) {
   const def = BUILDINGS[building];
   if (def.kind === 'park') return <ParkScene />;
   if (def.kind === 'strand') {
@@ -75,6 +75,16 @@ function Scene({ world, building, onTap }: { world: World; building: BuildingId;
   }
   return <g>{backdrop}{inner}</g>;
 }
+
+/** Csak akkor rajzoljuk újra, ha a hely kinézete változik (nem minden lépésnél). */
+const Scene = memo(SceneRaw, (a, b) => {
+  if (a.building !== b.building) return false;
+  const k = BUILDINGS[a.building].kind;
+  if (k === 'otthon') return JSON.stringify(a.world.homes[a.building as HomeId]) === JSON.stringify(b.world.homes[b.building as HomeId]);
+  if (k === 'strand') return a.world.sandcastle === b.world.sandcastle;
+  if (k === 'busz' || k === 'vasut' || k === 'repter') return Math.floor(a.world.minute) === Math.floor(b.world.minute);
+  return true;
+});
 
 export function InsideScreen({ building }: { building: BuildingId }) {
   const world = useGame((s) => s.world)!;
@@ -225,7 +235,7 @@ export function InsideScreen({ building }: { building: BuildingId }) {
               key={c.id}
               cat={c}
               x={l ? l.x : c.x}
-              y={l ? l.y + 60 : c.activity === 'alszik' ? F - 20 : c.activity === 'uszik' ? F + 70 : F + 40}
+              y={l ? l.y + 60 : c.activity === 'alszik' ? F - 20 : c.activity === 'uszik' ? F + 70 : c.spot === 'hinta' ? F - 4 : F + 40}
               minute={world.minute}
               selected={c.id === selected}
               lifted={!!l}

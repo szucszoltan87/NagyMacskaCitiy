@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { GROUND_Y, SCENE_HEIGHT, SIDEWALK_BOTTOM, type StreetDef } from '../data/buildings';
 import type { DayPhase } from '../sim/time';
 
@@ -146,7 +147,7 @@ function FarLayer({ scenery, width, night }: { scenery: SceneryKind; width: numb
   );
 }
 
-export function Sky({ phase, width, scenery = 'varos' }: { phase: DayPhase; width: number; scenery?: SceneryKind }) {
+function SkyRaw({ phase, width, scenery = 'varos' }: { phase: DayPhase; width: number; scenery?: SceneryKind }) {
   const [top, bottom] = SKY[scenery][phase];
   const id = `sky-${scenery}-${phase}`;
   const night = phase === 'ejjel';
@@ -226,7 +227,7 @@ function RoundTree({ x, night }: { x: number; night: boolean }) {
 }
 
 /** Fák az épületek között (az épületek mögött). */
-export function Backdrop({ night, xs, scenery = 'varos' }: { night: boolean; xs: number[]; scenery?: SceneryKind }) {
+function BackdropRaw({ night, xs, scenery = 'varos' }: { night: boolean; xs: number[]; scenery?: SceneryKind }) {
   return (
     <g>
       {xs.map((x, i) => {
@@ -241,7 +242,7 @@ export function Backdrop({ night, xs, scenery = 'varos' }: { night: boolean; xs:
   );
 }
 
-export function Street({ width, scenery = 'varos' }: { width: number; scenery?: SceneryKind }) {
+function StreetRaw({ width, scenery = 'varos' }: { width: number; scenery?: SceneryKind }) {
   const G = GROUND_Y;
   if (scenery === 'ho' || scenery === 'szavanna' || scenery === 'dzsungel') {
     const ground = scenery === 'ho' ? '#FFFFFF' : scenery === 'szavanna' ? '#F3D9A0' : '#9EDFC0';
@@ -281,7 +282,7 @@ export function Street({ width, scenery = 'varos' }: { width: number; scenery?: 
 }
 
 /** Lámpák, zászlófüzérek, hóesés, eső. */
-export function StreetFront({ lit, xs, scenery = 'varos', width }: { lit: boolean; xs: number[]; scenery?: SceneryKind; width: number }) {
+function StreetFrontRaw({ lit, xs, scenery = 'varos', width }: { lit: boolean; xs: number[]; scenery?: SceneryKind; width: number }) {
   if (scenery === 'ho' || scenery === 'dzsungel') {
     const n = Math.ceil(width / 50);
     return (
@@ -330,3 +331,8 @@ export function StreetFront({ lit, xs, scenery = 'varos', width }: { lit: boolea
     </g>
   );
 }
+
+export const Sky = memo(SkyRaw);
+export const Backdrop = memo(BackdropRaw, (a, b) => a.night === b.night && a.scenery === b.scenery && a.xs.join() === b.xs.join());
+export const Street = memo(StreetRaw);
+export const StreetFront = memo(StreetFrontRaw, (a, b) => a.lit === b.lit && a.scenery === b.scenery && a.width === b.width && a.xs.join() === b.xs.join());

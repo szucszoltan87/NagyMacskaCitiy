@@ -477,7 +477,7 @@ function OutdoorBase({ water = false }: { water?: boolean }) {
   return (
     <g>
       <rect x={-300} y={-100} width={ROOM_WIDTH + 600} height={F + 100} fill="#BDE6FF" />
-      <circle cx={850} cy={110} r={50} fill="#FFE58F" stroke="#F5B94A" strokeWidth={4} />
+      <circle cx={690} cy={190} r={46} fill="#FFE58F" stroke="#F5B94A" strokeWidth={4} />
       {[150, 450].map((x) => (
         <path key={x} d={`M ${x - 70} 140 Q ${x - 90} 120 ${x - 60} 110 Q ${x - 40} 80 ${x} 96 Q ${x + 40} 76 ${x + 60} 106 Q ${x + 90} 110 ${x + 70} 140 Z`} fill="#fff" />
       ))}
@@ -489,7 +489,9 @@ function OutdoorBase({ water = false }: { water?: boolean }) {
           {[620, 760, 900].map((x) => <path key={x} d={`M ${x} ${F + 40} q 20 -10 40 0`} stroke="#fff" strokeWidth={5} fill="none" strokeLinecap="round" />)}
         </g>
       )}
-      <Sign x={ROOM_DOOR_X} y={F - 40} text="🚪 Ki az utcára" />
+      <path d={`M ${ROOM_DOOR_X - 50} ${F + 20} L ${ROOM_DOOR_X - 50} ${F - 110} Q ${ROOM_DOOR_X} ${F - 170} ${ROOM_DOOR_X + 50} ${F - 110} L ${ROOM_DOOR_X + 50} ${F + 20}`} fill="none" stroke="#5CC3A0" strokeWidth={12} strokeLinecap="round" />
+      {[-30, 0, 30].map((d, i) => <circle key={d} cx={ROOM_DOOR_X + d} cy={F - 140 + Math.abs(d) * 0.5} r={8} fill={PASTELS[i]} stroke="#fff" strokeWidth={2} />)}
+      <Sign x={ROOM_DOOR_X} y={F - 190} text="🚪 Ki az utcára" />
     </g>
   );
 }
